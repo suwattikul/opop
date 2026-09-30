@@ -1,1 +1,1312 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberCore Tech - Ultimate PC Hardware & Custom Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            900: '#070913',
+                            800: '#0F172A',
+                            700: '#1E293B',
+                            600: '#334155',
+                            cyan: '#00F0FF',
+                            purple: '#A855F7',
+                            pink: '#EC4899',
+                            emerald: '#10B981'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #070913; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00F0FF; }
+        .glow-cyan { box-shadow: 0 0 25px rgba(0, 240, 255, 0.3); }
+        .glow-purple { box-shadow: 0 0 25px rgba(168, 85, 247, 0.3); }
+        .glow-pink { box-shadow: 0 0 25px rgba(236, 72, 153, 0.3); }
+        .glow-hover:hover { box-shadow: 0 0 35px rgba(0, 240, 255, 0.5); }
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(30, 41, 59, 0.4) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(30, 41, 59, 0.4) 1px, transparent 1px);
+            background-size: 36px 36px;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(51, 65, 85, 0.6);
+        }
+    </style>
+</head>
+<body class="bg-cyber-900 text-gray-100 min-h-screen selection:bg-cyber-cyan selection:text-cyber-900 relative">
 
+    <header class="sticky top-0 z-50 glass-panel border-b border-cyber-700/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchView('store')">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyber-cyan via-cyber-purple to-cyber-pink flex items-center justify-center glow-cyan group-hover:rotate-12 transition-transform duration-300">
+                        <i data-lucide="cpu" class="w-6 h-6 text-cyber-900"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-wider bg-gradient-to-r from-cyber-cyan via-white to-cyber-pink bg-clip-text text-transparent">CYBERCORE</span>
+                        <span class="block text-[10px] text-cyber-cyan font-semibold tracking-widest uppercase">Elite Hardware & Custom Rig</span>
+                    </div>
+                </div>
+
+                <nav class="hidden lg:flex items-center space-x-6 font-medium text-sm">
+                    <button onclick="switchView('store')" id="navStoreBtn" class="px-4 py-2 rounded-xl bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30 transition-all font-semibold">หน้าแรกและสินค้า</button>
+                    <button onclick="switchView('builder')" id="navBuilderBtn" class="px-4 py-2 rounded-xl text-gray-300 hover:text-cyber-cyan hover:bg-cyber-800 transition-all">ระบบจัดสเปกคอม (PC Builder)</button>
+                    <button onclick="scrollToSection('faqSection')" class="px-4 py-2 rounded-xl text-gray-300 hover:text-cyber-cyan hover:bg-cyber-800 transition-all">คำถามที่พบบ่อย</button>
+                    <button onclick="scrollToSection('reviewsSection')" class="px-4 py-2 rounded-xl text-gray-300 hover:text-cyber-cyan hover:bg-cyber-800 transition-all">รีวิวจากลูกค้า</button>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <div class="relative hidden sm:block">
+                        <input type="text" id="headerSearch" placeholder="ค้นหาฮาร์ดแวร์, RTX 4090, i9..." 
+                            class="bg-cyber-800/90 border border-cyber-700 text-sm rounded-full pl-10 pr-4 py-2 w-56 lg:w-64 focus:outline-none focus:border-cyber-cyan transition-all text-gray-200 placeholder-gray-500">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-3"></i>
+                    </div>
+
+                    <div class="relative">
+                        <button onclick="toggleNotifications()" class="relative p-2.5 rounded-xl bg-cyber-800/80 border border-cyber-700 hover:border-cyber-cyan hover:bg-cyber-700 transition-all text-gray-200">
+                            <i data-lucide="bell" class="w-5 h-5 text-cyber-purple"></i>
+                            <span id="notifBadge" class="absolute -top-1 -right-1 bg-cyber-pink text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">2</span>
+                        </button>
+                        <div id="notifDropdown" class="absolute right-0 mt-2 w-80 bg-cyber-800 border border-cyber-700 rounded-2xl shadow-2xl p-4 hidden z-50">
+                            <div class="flex items-center justify-between pb-3 border-b border-cyber-700 mb-3">
+                                <h4 class="font-bold text-sm text-white flex items-center space-x-2">
+                                    <i data-lucide="bell" class="w-4 h-4 text-cyber-purple"></i>
+                                    <span>การแจ้งเตือนระบบ</span>
+                                </h4>
+                                <span class="text-[10px] bg-cyber-purple/20 text-cyber-purple px-2 py-0.5 rounded-full font-semibold">ใหม่ 2</span>
+                            </div>
+                            <div class="space-y-3 text-xs">
+                                <div class="p-2.5 rounded-xl bg-cyber-900/60 border border-cyber-700/50 hover:border-cyber-cyan transition-all cursor-pointer">
+                                    <p class="font-bold text-white">🔥 โปรโมชั่นพิเศษ RTX 40 Series</p>
+                                    <p class="text-gray-400 mt-0.5">รับโค้ดส่วนลด 1,000 บาท เมื่อประกอบคอมครบชุดวันนี้</p>
+                                    <span class="text-[10px] text-gray-500 mt-1 block">10 นาทีที่แล้ว</span>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-cyber-900/60 border border-cyber-700/50 hover:border-cyber-cyan transition-all cursor-pointer">
+                                    <p class="font-bold text-white">📦 สินค้าเข้าใหม่แล้ว!</p>
+                                    <p class="text-gray-400 mt-0.5">Intel Core i9-14900KS และ DDR5 Dominator Titanium พร้อมส่ง</p>
+                                    <span class="text-[10px] text-gray-500 mt-1 block">1 ชั่วโมงที่แล้ว</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="toggleProfileModal()" class="p-2.5 rounded-xl bg-cyber-800/80 border border-cyber-700 hover:border-cyber-cyan hover:bg-cyber-700 transition-all text-gray-200 flex items-center space-x-2">
+                        <i data-lucide="user" class="w-5 h-5 text-cyber-cyan"></i>
+                        <span class="hidden md:inline text-xs font-semibold">บัญชีผู้ใช้</span>
+                    </button>
+
+                    <button onclick="toggleWishlistModal()" class="relative p-2.5 rounded-xl bg-cyber-800/80 border border-cyber-700 hover:border-cyber-cyan hover:bg-cyber-700 transition-all text-gray-200">
+                        <i data-lucide="heart" class="w-5 h-5 text-cyber-pink"></i>
+                        <span id="wishlistBadge" class="absolute -top-1 -right-1 bg-cyber-pink text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+                    </button>
+
+                    <button onclick="toggleCart()" class="relative p-2.5 rounded-xl bg-cyber-800/80 border border-cyber-700 hover:border-cyber-cyan hover:bg-cyber-700 transition-all text-gray-200">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-cyber-cyan"></i>
+                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-cyber-cyan text-cyber-900 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center hidden">0</span>
+                    </button>
+
+                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl bg-cyber-800 border border-cyber-700 text-gray-300">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="lg:hidden bg-cyber-800 border-b border-cyber-700 px-6 py-4 space-y-3 hidden">
+            <button onclick="switchView('store'); toggleMobileMenu();" class="block w-full text-left py-2 text-sm font-semibold text-cyber-cyan">หน้าแรกและสินค้า</button>
+            <button onclick="switchView('builder'); toggleMobileMenu();" class="block w-full text-left py-2 text-sm font-semibold text-gray-300">ระบบจัดสเปกคอม (PC Builder)</button>
+            <button onclick="scrollToSection('faqSection'); toggleMobileMenu();" class="block w-full text-left py-2 text-sm font-semibold text-gray-300">คำถามที่พบบ่อย</button>
+            <button onclick="scrollToSection('reviewsSection'); toggleMobileMenu();" class="block w-full text-left py-2 text-sm font-semibold text-gray-300">รีวิวจากลูกค้า</button>
+        </div>
+    </header>
+
+    <main id="storeView" class="block">
+        <section class="relative overflow-hidden bg-grid-pattern py-20 lg:py-28 border-b border-cyber-700/50">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyber-900/70 to-cyber-900 pointer-events-none"></div>
+            <div class="absolute -top-32 -left-32 w-96 h-96 bg-cyber-cyan/15 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute top-1/3 -right-32 w-96 h-96 bg-cyber-purple/15 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-cyber-800 border border-cyber-cyan/30 text-cyber-cyan text-xs font-semibold uppercase tracking-wider mb-6 glow-cyan">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                    <span>Next-Gen Gaming Rig & Extreme Workstation Center</span>
+                </div>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6">
+                    ปลดปล่อยขุมพลังแห่งอนาคตด้วย <br class="hidden sm:inline">
+                    <span class="bg-gradient-to-r from-cyber-cyan via-cyber-purple to-cyber-pink bg-clip-text text-transparent">ฮาร์ดแวร์ระดับท็อปของโลก</span>
+                </h1>
+                <p class="max-w-2xl mx-auto text-base sm:text-lg text-gray-400 mb-10">
+                    ศูนย์รวมการ์ดจอ RTX Series, ซีพียูทรงพลัง, และอุปกรณ์เกมมิ่งเกียร์สเปกสูงสุดสำหรับเกมเมอร์ ครีเอเตอร์ และนักศึกษาไอทีที่ต้องการความสมบูรณ์แบบ
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <button onclick="scrollToProducts()" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-cyber-cyan to-cyber-purple text-cyber-900 font-bold hover:opacity-95 transition-all glow-cyan flex items-center justify-center space-x-2">
+                        <i data-lucide="cpu" class="w-5 h-5"></i>
+                        <span>ช้อปสินค้าฮาร์ดแวร์ทั้งหมด</span>
+                    </button>
+                    <button onclick="switchView('builder')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-cyber-800 border border-cyber-700 hover:border-cyber-cyan text-gray-200 font-semibold transition-all flex items-center justify-center space-x-2 glow-hover">
+                        <i data-lucide="sliders" class="w-5 h-5 text-cyber-cyan"></i>
+                        <span>ทดลองจัดสเปกคอม (PC Builder)</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+                <div>
+                    <h2 id="catalogTitle" class="text-3xl font-black tracking-tight text-white">แคตตาล็อกสินค้าและอุปกรณ์ฮาร์ดแวร์</h2>
+                    <p class="text-gray-400 text-sm mt-1">สินค้าของแท้ ประกันศูนย์ไทย 100% พร้อมบริการประกอบและทดสอบระบบฟรี</p>
+                </div>
+
+                <div id="categoryFilters" class="flex flex-wrap gap-2">
+                    <button onclick="filterCategory('all')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-cyan text-cyber-900 shadow-md">ทั้งหมด</button>
+                    <button onclick="filterCategory('GPU')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">การ์ดจอ (GPU)</button>
+                    <button onclick="filterCategory('CPU')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">ซีพียู (CPU)</button>
+                    <button onclick="filterCategory('Motherboard')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">เมนบอร์ด</button>
+                    <button onclick="filterCategory('RAM')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">หน่วยความจำ (RAM)</button>
+                    <button onclick="filterCategory('SSD')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">เอสเอสดี (SSD)</button>
+                    <button onclick="filterCategory('Liquid Cooling')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">ชุดน้ำระบายความร้อน</button>
+                    <button onclick="filterCategory('Monitor')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">จอมอนิเตอร์</button>
+                    <button onclick="filterCategory('Gaming Gear')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan">เกมมิ่งเกียร์</button>
+                </div>
+            </div>
+
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+
+            <div id="emptyState" class="hidden text-center py-24">
+                <div class="w-20 h-20 bg-cyber-800 rounded-full flex items-center justify-center mx-auto mb-4 border border-cyber-700 text-gray-400">
+                    <i data-lucide="frown" class="w-10 h-10"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">ไม่พบสินค้าที่คุณค้นหา</h3>
+                <p class="text-gray-400 text-sm mb-6">ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่สินค้าอื่น</p>
+                <button onclick="resetFilters()" class="px-6 py-2.5 rounded-xl bg-cyber-cyan text-cyber-900 font-semibold text-sm">รีเซ็ตการค้นหา</button>
+            </div>
+        </section>
+    </main>
+
+    <section id="builderView" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 hidden">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="px-4 py-1.5 rounded-full bg-cyber-purple/20 text-cyber-purple text-xs font-semibold uppercase tracking-wider border border-cyber-purple/30">Interactive Rig Customizer</span>
+            <h2 class="text-3xl sm:text-4xl font-black mt-3 text-white">ระบบจัดสเปกคอมพิวเตอร์ออนไลน์ (PC Builder)</h2>
+            <p class="text-gray-400 text-sm mt-2">เลือกฮาร์ดแวร์แต่ละชิ้นส่วน ระบบจะตรวจสอบความเข้ากันได้ (Compatibility) และคำนวณกำลังไฟให้อัตโนมัติ</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-4" id="builderSlotsContainer">
+            </div>
+
+            <div class="bg-cyber-800 p-6 rounded-2xl border border-cyber-700 h-fit sticky top-28 space-y-6 shadow-xl">
+                <div class="flex items-center justify-between pb-4 border-b border-cyber-700">
+                    <h3 class="font-bold text-lg text-white flex items-center space-x-2">
+                        <i data-lucide="cpu" class="w-5 h-5 text-cyber-cyan"></i>
+                        <span>สรุปสเปกคอมของคุณ</span>
+                    </h3>
+                    <span id="builderTotalCount" class="text-xs bg-cyber-cyan/20 text-cyber-cyan px-2.5 py-1 rounded-full font-bold">0 ชิ้นส่วน</span>
+                </div>
+
+                <div id="compatibilityBox" class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-start space-x-3">
+                    <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
+                    <div>
+                        <h4 class="font-bold text-xs text-emerald-400 uppercase tracking-wider">สถานะความเข้ากันได้</h4>
+                        <p id="compatibilityText" class="text-xs text-gray-300 mt-1">ฮาร์ดแวร์ทุกชิ้นเข้ากันได้ดีเยี่ยม จ่ายไฟเพียงพอ</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                    <div class="flex justify-between text-gray-400">
+                        <span>กำลังไฟที่ต้องการโดยประมาณ:</span>
+                        <span id="estWattage" class="font-bold text-white">0 W</span>
+                    </div>
+                    <div class="flex justify-between text-gray-400">
+                        <span>แนะนำพาวเวอร์ซัพพลายขั้นต่ำ:</span>
+                        <span id="recPsu" class="font-bold text-cyber-cyan">650W - 850W</span>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-cyber-700">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-gray-400 font-medium text-sm">ยอดรวมราคาสเปก:</span>
+                        <span id="builderTotalPrice" class="text-2xl font-black text-cyber-cyan">฿0</span>
+                    </div>
+                    <div class="space-y-3">
+                        <button onclick="addBuilderToCart()" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyber-cyan to-cyber-purple text-cyber-900 font-bold hover:opacity-95 transition-all glow-cyan flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span>เพิ่มสเปกนี้ลงในตะกร้า</span>
+                        </button>
+                        <button onclick="resetBuilder()" class="w-full py-3 rounded-xl bg-cyber-700/50 hover:bg-cyber-700 text-gray-300 text-xs font-semibold transition-all">
+                            ล้างข้อมูลสเปกทั้งหมด
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faqSection" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-cyber-700/40">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-cyber-cyan text-xs font-semibold uppercase tracking-widest">Help Center</span>
+            <h3 class="text-2xl sm:text-3xl font-black mt-2 text-white">คำถามที่พบบ่อย (FAQ)</h3>
+        </div>
+        <div class="space-y-4" id="faqAccordionContainer">
+        </div>
+    </section>
+
+    <section id="reviewsSection" class="bg-cyber-800/40 border-t border-b border-cyber-700/40 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-cyber-purple text-xs font-semibold uppercase tracking-widest">Testimonials</span>
+                <h3 class="text-2xl sm:text-3xl font-black mt-2 text-white">เสียงตอบรับจากเกมเมอร์และโปรครีเอเตอร์</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-cyber-800 p-6 rounded-2xl border border-cyber-700 relative">
+                    <div class="flex items-center space-x-1 text-amber-400 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-6">"จัดสเปกคอมทำงานเรนเดอร์งาน 3D สถาปัตย์ผ่าน CyberCore แรงสะใจมาก ส่งไว บริการดีเยี่ยม มีปัญหาปรึกษาช่างเทคนิคได้ตลอด"</p>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-cyber-cyan/20 border border-cyber-cyan flex items-center justify-center font-bold text-cyber-cyan text-sm">K</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">คุณกันต์พจน์</h4>
+                            <span class="text-xs text-gray-400">นักศึกษาคณะวิศวกรรมคอมพิวเตอร์</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-800 p-6 rounded-2xl border border-cyber-700 relative">
+                    <div class="flex items-center space-x-1 text-amber-400 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-6">"การ์ดจอ RTX 4090 สภาพกริบ กล่องคมกริบ เล่นเกมระดับ 4K ปรับสุดทุกเกม เฟรมเรตพุ่งกระฉูด ร้านนี้ไว้ใจได้ 100%"</p>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-cyber-purple/20 border border-cyber-purple flex items-center justify-center font-bold text-cyber-purple text-sm">T</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">ธนภัทร (Pro Streamer)</h4>
+                            <span class="text-xs text-gray-400">Content Creator</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-cyber-800 p-6 rounded-2xl border border-cyber-700 relative">
+                    <div class="flex items-center space-x-1 text-amber-400 mb-4">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-6">"จอเกมมิ่ง 240Hz สีสันสดใส คมชัด ทัชสอฟต์แวร์จัดส่งรวดเร็วห่อกันกระแทกมาหนาแน่นมาก ประทับใจสุดๆ ครับ"</p>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-cyber-pink/20 border border-cyber-pink flex items-center justify-center font-bold text-cyber-pink text-sm">P</div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">ปิยวัฒน์</h4>
+                            <span class="text-xs text-gray-400">เกมเมอร์และนักศึกษาไอที</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="bg-gradient-to-r from-cyber-800 to-cyber-700 border border-cyber-600 rounded-3xl p-8 sm:p-12 relative overflow-hidden text-center shadow-2xl">
+            <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-cyber-cyan/10 rounded-full blur-3xl pointer-events-none"></div>
+            <h3 class="text-2xl sm:text-3xl font-black text-white mb-3">รับข่าวสารฮาร์ดแวร์ใหม่และโปรโมชั่นพิเศษก่อนใคร</h3>
+            <p class="text-gray-300 text-sm max-w-xl mx-auto mb-8">สมัครรับจดหมายข่าวจาก CyberCore เพื่อรับสิทธิ์ซื้อฮาร์ดแวร์ราคาวิเศษและโค้ดส่วนลดประจำสัปดาห์</p>
+            <form onsubmit="handleNewsletter(event)" class="flex flex-col sm:flex-row justify-center items-center gap-3 max-w-md mx-auto">
+                <input type="email" id="newsletterEmail" placeholder="กรอกอีเมลของคุณ..." required
+                    class="w-full bg-cyber-900 border border-cyber-600 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyber-cyan">
+                <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-cyber-cyan text-cyber-900 font-bold text-sm hover:opacity-90 transition-all shrink-0">
+                    ติดตามข่าว
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-cyber-900 border-t border-cyber-700/60 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-cyber-cyan flex items-center justify-center text-cyber-900 font-black">
+                            <i data-lucide="cpu" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-xl font-black tracking-wider text-white">CYBERCORE</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">ผู้นำด้านฮาร์ดแวร์คอมพิวเตอร์และอุปกรณ์เกมมิ่งเกียร์ระดับไฮเอนด์ ตอบโจทย์ทุกลอฟท์การใช้งานและการแข่งขัน E-Sports</p>
+                </div>
+                <div>
+                    <h5 class="font-bold text-white mb-4 text-sm uppercase tracking-wider">หมวดหมู่สินค้า</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="filterCategory('GPU')" class="hover:text-cyber-cyan transition-colors">การ์ดจอ (GPU)</button></li>
+                        <li><button onclick="filterCategory('CPU')" class="hover:text-cyber-cyan transition-colors">ซีพียู (CPU)</button></li>
+                        <li><button onclick="filterCategory('Motherboard')" class="hover:text-cyber-cyan transition-colors">เมนบอร์ด</button></li>
+                        <li><button onclick="filterCategory('RAM')" class="hover:text-cyber-cyan transition-colors">หน่วยความจำ (RAM)</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-white mb-4 text-sm uppercase tracking-wider">บริการลูกค้า</h5>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-cyber-cyan transition-colors">ตรวจสอบสถานะการจัดส่ง</a></li>
+                        <li><a href="#" class="hover:text-cyber-cyan transition-colors">เงื่อนไขการรับประกันสินค้า</a></li>
+                        <li><a href="#" class="hover:text-cyber-cyan transition-colors">บริการจัดสเปกคอมพิวเตอร์</a></li>
+                        <li><a href="#" class="hover:text-cyber-cyan transition-colors">ติดต่อเรา / แผนที่ร้าน</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-white mb-4 text-sm uppercase tracking-wider">ติดต่อเรา</h5>
+                    <p class="text-sm text-gray-400 mb-2">อาคารนวัตกรรมดิจิทัล ชั้น 3 มหาวิทยาลัยเทคโนโลยี</p>
+                    <p class="text-sm text-gray-400 mb-2">โทร: 02-xxx-xxxx</p>
+                    <p class="text-sm text-cyber-cyan font-semibold">Email: support@cybercore.tech</p>
+                </div>
+            </div>
+            <div class="border-t border-cyber-800 pt-8 text-center text-xs text-gray-500">
+                &copy; 2026 CyberCore Tech. All rights reserved. Designed for Ultimate Tech Enthusiasts.
+            </div>
+        </div>
+    </footer>
+
+    <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-cyber-800 border-l border-cyber-700 flex flex-col shadow-2xl">
+                <div class="p-6 border-b border-cyber-700 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-cyber-cyan"></i>
+                        <h3 class="font-bold text-lg text-white">ตะกร้าสินค้าของคุณ</h3>
+                    </div>
+                    <button onclick="toggleCart()" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-cyber-700 transition-all">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4">
+                </div>
+                <div class="p-6 border-t border-cyber-700 bg-cyber-900/60">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-gray-400 font-medium">ยอดรวมสุทธิ:</span>
+                        <span id="cartSubtotal" class="text-2xl font-black text-cyber-cyan">฿0</span>
+                    </div>
+                    <button onclick="openCheckoutModal()" class="w-full py-4 rounded-xl bg-gradient-to-r from-cyber-cyan to-cyber-purple text-cyber-900 font-bold hover:opacity-95 transition-all glow-cyan flex items-center justify-center space-x-2">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i>
+                        <span>ดำเนินการสั่งซื้อและออกใบเสร็จ</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="quickViewModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeQuickView()"></div>
+        <div class="relative bg-cyber-800 border border-cyber-700 rounded-2xl max-w-3xl w-full p-6 sm:p-8 overflow-hidden shadow-2xl z-10">
+            <button onclick="closeQuickView()" class="absolute top-4 right-4 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-cyber-700 transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="quickViewContent">
+            </div>
+        </div>
+    </div>
+
+    <div id="wishlistModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleWishlistModal()"></div>
+        <div class="relative bg-cyber-800 border border-cyber-700 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 max-h-[80vh] flex flex-col">
+            <div class="flex items-center justify-between pb-4 border-b border-cyber-700 mb-4">
+                <h3 class="font-bold text-lg text-white flex items-center space-x-2">
+                    <i data-lucide="heart" class="w-5 h-5 text-cyber-pink"></i>
+                    <span>รายการสินค้าที่ถูกใจ (Wishlist)</span>
+                </h3>
+                <button onclick="toggleWishlistModal()" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-cyber-700 transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="wishlistContainer" class="flex-1 overflow-y-auto space-y-3">
+            </div>
+        </div>
+    </div>
+    <div id="profileModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleProfileModal()"></div>
+        <div class="relative bg-cyber-800 border border-cyber-700 rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl z-10">
+            <button onclick="toggleProfileModal()" class="absolute top-4 right-4 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-cyber-700 transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-cyber-cyan to-cyber-purple flex items-center justify-center mx-auto mb-3 glow-cyan text-cyber-900 font-black text-2xl">
+                    CC
+                </div>
+                <h3 class="font-bold text-xl text-white">บัญชีสมาชิก CyberCore Elite</h3>
+                <p class="text-xs text-cyber-cyan mt-1">Status: VIP Hardware Member</p>
+            </div>
+            <div class="space-y-4 text-xs">
+                <div class="bg-cyber-900/60 p-4 rounded-xl border border-cyber-700 space-y-2">
+                    <div class="flex justify-between"><span class="text-gray-400">ชื่อสมาชิก:</span><span class="text-white font-semibold">คุณณัฐพงศ์ เทคโนโลยี</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">อีเมล:</span><span class="text-white font-semibold">nattapong@cybercore.tech</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">แต้มสะสม:</span><span class="text-cyber-cyan font-bold">2,450 คะแนน</span></div>
+                </div>
+                <button onclick="toggleProfileModal(); showToast('บันทึกข้อมูลโปรไฟล์เรียบร้อย');" class="w-full py-3 rounded-xl bg-cyber-cyan text-cyber-900 font-bold hover:opacity-90 transition-all">
+                    แก้ไขข้อมูลส่วนตัว
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeCheckoutModal()"></div>
+        <div class="relative bg-cyber-800 border border-cyber-700 rounded-2xl max-w-xl w-full p-6 sm:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 p-2 rounded-lg text-gray-400 hover:text-white hover:bg-cyber-700 transition-all">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="receiptContent">
+            </div>
+        </div>
+    </div>
+
+    <div id="builderPickerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeBuilderPicker()"></div>
+        <div class="relative bg-cyber-800 border border-cyber-700 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl z-10 max-h-[85vh] flex flex-col">
+            <div class="flex items-center justify-between pb-4 border-b border-cyber-700 mb-4">
+                <h3 id="builderPickerTitle" class="font-bold text-lg text-white">เลือกชิ้นส่วน</h3>
+                <button onclick="closeBuilderPicker()" class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-cyber-700 transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div id="builderPickerList" class="flex-1 overflow-y-auto space-y-3 pr-2">
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "ASUS ROG Strix GeForce RTX 4090 OC 24GB",
+                category: "GPU",
+                price: 74900,
+                rating: 5.0,
+                reviewsCount: 42,
+                stock: "พร้อมส่ง (มีสินค้า 5 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=800&q=80",
+                wattage: 450,
+                specs: { "CUDA Cores": "16384", "Boost Clock": "2640 MHz", "Memory": "24GB GDDR6X", "Power": "450W" },
+                desc: "การ์ดจอเรือธงทรงพลังที่สุดสำหรับการเล่นเกม 4K ขั้นสุดยอด และเรนเดอร์งาน 3D ระดับโปร"
+            },
+            {
+                id: 2,
+                name: "MSI GeForce RTX 4080 Super Gaming X Trio 16GB",
+                category: "GPU",
+                price: 38900,
+                rating: 4.9,
+                reviewsCount: 29,
+                stock: "พร้อมส่ง (มีสินค้า 8 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=800&q=80",
+                wattage: 320,
+                specs: { "CUDA Cores": "10240", "Boost Clock": "2610 MHz", "Memory": "16GB GDDR6X", "Power": "320W" },
+                desc: "การ์ดจอระดับไฮเอนด์เล่นเกมปรับสุดทุกรายการ พร้อมระบบระบายความร้อน Tri Frozr 3 อันทรงพลัง"
+            },
+            {
+                id: 3,
+                name: "Intel Core i9-14900KS Processor",
+                category: "CPU",
+                price: 23900,
+                rating: 4.9,
+                reviewsCount: 38,
+                stock: "พร้อมส่ง (มีสินค้า 8 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&w=800&q=80",
+                wattage: 150,
+                specs: { "Cores/Threads": "24 Cores / 32 Threads", "Max Turbo": "6.2 GHz", "Socket": "LGA 1700", "Power": "150W" },
+                desc: "ซีพียูความเร็วสูงสุด 6.2 GHz ทรงพลังที่สุดในโลกสำหรับเกมเมอร์และครีเอเตอร์"
+            },
+            {
+                id: 4,
+                name: "AMD Ryzen 9 7950X3D Gaming Processor",
+                category: "CPU",
+                price: 21900,
+                rating: 5.0,
+                reviewsCount: 51,
+                stock: "พร้อมส่ง (มีสินค้า 6 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=800&q=80",
+                wattage: 120,
+                specs: { "Cores/Threads": "16 Cores / 32 Threads", "Cache": "144MB 3D V-Cache", "Socket": "AM5", "Power": "120W" },
+                desc: "สุดยอดซีพียูสำหรับเล่นเกมที่มีแคชขนาดใหญ่พิเศษและประสิทธิภาพมัลติทาสกิ้งไร้เทียมทาน"
+            },
+            {
+                id: 5,
+                name: "MSI MPG Z790 CARBON WIFI Motherboard",
+                category: "Motherboard",
+                price: 13500,
+                rating: 4.8,
+                reviewsCount: 25,
+                stock: "พร้อมส่ง (มีสินค้า 4 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
+                wattage: 40,
+                specs: { "Socket": "LGA 1700", "Memory": "4x DDR5, Max 192GB", "PCI-E": "PCI-E 5.0", "Wi-Fi": "Wi-Fi 7" },
+                desc: "เมนบอร์ดเกมมิ่งระดับไฮเอนด์ ดีไซน์ดุดัน รองรับแรม DDR5 และโอเวอร์คล็อกเต็มพิกัด"
+            },
+            {
+                id: 6,
+                name: "ASUS ROG CROSSHAIR X670E HERO Motherboard",
+                category: "Motherboard",
+                price: 19900,
+                rating: 4.9,
+                reviewsCount: 18,
+                stock: "พร้อมส่ง (มีสินค้า 3 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&w=800&q=80",
+                wattage: 45,
+                specs: { "Socket": "AM5", "Memory": "4x DDR5", "PCI-E": "PCI-E 5.0", "Lighting": "Polymo Lighting RGB" },
+                desc: "เมนบอร์ดเรือธงสำหรับซีพียู AMD Ryzen 7000/9000 สเปกพรีเมียมครบเครื่อง"
+            },
+            {
+                id: 7,
+                name: "Corsair Dominator Titanium RGB 32GB (2x16GB) DDR5 6000MHz",
+                category: "RAM",
+                price: 6500,
+                rating: 4.9,
+                reviewsCount: 56,
+                stock: "พร้อมส่ง (มีสินค้า 12 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1562976540-1e02c614d1c0?auto=format&fit=crop&w=800&q=80",
+                wattage: 15,
+                specs: { "Capacity": "32GB (2x16GB)", "Speed": "6000MHz CL30", "Type": "DDR5", "RGB": "Dynamic RGB" },
+                desc: "แรม DDR5 ดีไซน์หรูหราพรีเมียม ให้แบนด์วิดท์กว้างและค่าความหน่วงต่ำสุดๆ"
+            },
+            {
+                id: 8,
+                name: "WD_BLACK SN850X NVMe M.2 2TB SSD",
+                category: "SSD",
+                price: 5990,
+                rating: 4.9,
+                reviewsCount: 67,
+                stock: "พร้อมส่ง (มีสินค้า 20 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=800&q=80",
+                wattage: 10,
+                specs: { "Capacity": "2TB", "Read Speed": "7,300 MB/s", "Write Speed": "6,600 MB/s", "Interface": "PCIe Gen4" },
+                desc: "SSD M.2 ความเร็วสูงระดับท็อป โหลดเกมและไฟล์โปรแกรมขนาดใหญ่ในพริบตา"
+            },
+            {
+                id: 9,
+                name: "NZXT Kraken Elite 360 RGB Liquid Cooler",
+                category: "Liquid Cooling",
+                price: 9800,
+                rating: 4.9,
+                reviewsCount: 34,
+                stock: "พร้อมส่ง (มีสินค้า 7 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=800&q=80",
+                wattage: 25,
+                specs: { "Radiator": "360mm", "Display": "2.36\" Wide-angle LCD", "Pump": "Asetek 7th Gen", "Fans": "F120 RGB" },
+                desc: "ชุดน้ำปิด 360mm พร้อมหน้าจอ LCD คมชัดสูงแสดงอุณหภูมิหรือ GIF ได้ตามใจชอบ"
+            },
+            {
+                id: 10,
+                name: "Samsung Odyssey OLED G9 49\" Curved Gaming Monitor",
+                category: "Monitor",
+                price: 45900,
+                rating: 4.9,
+                reviewsCount: 19,
+                stock: "พร้อมส่ง (มีสินค้า 3 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80",
+                wattage: 65,
+                specs: { "Panel": "49\" Dual QHD OLED", "Refresh Rate": "240Hz", "Response": "0.03ms", "Curvature": "1800R" },
+                desc: "จอมอนิเตอร์เกมมิ่งอัลตร้าไวด์ OLED สีสันสดใส คอนทราสต์ลุ่มลึก 240Hz"
+            },
+            {
+                id: 11,
+                name: "Logitech G PRO X Superlight 2 Wireless Mouse",
+                category: "Gaming Gear",
+                price: 5290,
+                rating: 5.0,
+                reviewsCount: 84,
+                stock: "พร้อมส่ง (มีสินค้า 15 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&w=800&q=80",
+                wattage: 5,
+                specs: { "Weight": "60 กรัม", "Sensor": "HERO 2 (32,000 DPI)", "Battery": "สูงสุด 95 ชั่วโมง" },
+                desc: "เมาส์เกมมิ่งไร้สายน้ำหนักเบาพิเศษที่โปรเพลเยอร์ทั่วโลกไว้วางใจ"
+            },
+            {
+                id: 12,
+                name: "Razer Huntsman V3 Pro Analog Gaming Keyboard",
+                category: "Gaming Gear",
+                price: 8900,
+                rating: 4.8,
+                reviewsCount: 31,
+                stock: "พร้อมส่ง (มีสินค้า 7 ชิ้น)",
+                image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+                wattage: 8,
+                specs: { "Switch": "Analog Optical Gen-2", "Actuation": "ปรับแต่งได้ 0.1 - 4.0 มม.", "Keycaps": "Double-shot PBT" },
+                desc: "คีย์บอร์ดเกมมิ่งสวิตช์อนาล็อกออปติคอล ปรับระยะกดได้เพื่อความเร็วเหนือชั้น"
+            }
+        ];
+
+        let cart = [];
+        let wishlist = [];
+        let currentFilter = 'all';
+
+        let builderConfig = {
+            CPU: null,
+            Motherboard: null,
+            GPU: null,
+            RAM: null,
+            SSD: null,
+            'Liquid Cooling': null
+        };
+
+        const builderCategories = [
+            { key: 'CPU', label: 'ซีพียู (CPU)' },
+            { key: 'Motherboard', label: 'เมนบอร์ด (Motherboard)' },
+            { key: 'GPU', label: 'การ์ดจอ (GPU)' },
+            { key: 'RAM', label: 'หน่วยความจำ (RAM)' },
+            { key: 'SSD', label: 'เอสเอสดี (SSD)' },
+            { key: 'Liquid Cooling', label: 'ชุดระบายความร้อน (Cooling)' }
+        ];
+
+        let activeBuilderCategory = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderProducts(products);
+            renderBuilderSlots();
+            renderFAQ();
+            updateBadges();
+            document.getElementById('headerSearch').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const filtered = products.filter(p => 
+                    p.name.toLowerCase().includes(query) || 
+                    p.category.toLowerCase().includes(query) ||
+                    p.desc.toLowerCase().includes(query)
+                );
+                renderProducts(filtered);
+            });
+        });
+
+        function switchView(view) {
+            const storeView = document.getElementById('storeView');
+            const builderView = document.getElementById('builderView');
+            const storeBtn = document.getElementById('navStoreBtn');
+            const builderBtn = document.getElementById('navBuilderBtn');
+
+            if (view === 'store') {
+                storeView.classList.remove('hidden');
+                builderView.classList.add('hidden');
+                storeBtn.className = "px-4 py-2 rounded-xl bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30 transition-all font-semibold";
+                builderBtn.className = "px-4 py-2 rounded-xl text-gray-300 hover:text-cyber-cyan hover:bg-cyber-800 transition-all";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                storeView.classList.add('hidden');
+                builderView.classList.remove('hidden');
+                builderBtn.className = "px-4 py-2 rounded-xl bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/30 transition-all font-semibold";
+                storeBtn.className = "px-4 py-2 rounded-xl text-gray-300 hover:text-cyber-cyan hover:bg-cyber-800 transition-all";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function renderProducts(items) {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            grid.innerHTML = '';
+            
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            items.forEach(product => {
+                const isWishlisted = wishlist.some(item => item.id === product.id);
+                const card = document.createElement('div');
+                card.className = "bg-cyber-800/90 rounded-2xl border border-cyber-700/80 overflow-hidden hover:border-cyber-cyan transition-all duration-300 flex flex-col justify-between group glow-hover relative";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden h-56 bg-cyber-900 cursor-pointer" onclick="openQuickView(${product.id})">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/111827/00F0FF?text=CyberCore+Tech'">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-cyber-900/80 backdrop-blur-md border border-cyber-700 text-xs font-semibold text-cyber-cyan">
+                                ${product.category}
+                            </div>
+                            <button onclick="event.stopPropagation(); toggleWishlist(${product.id})" class="absolute top-3 right-3 p-2 rounded-full bg-cyber-900/80 backdrop-blur-md border border-cyber-700 hover:border-cyber-pink transition-all text-gray-300">
+                                <i data-lucide="heart" class="w-4 h-4 ${isWishlisted ? 'text-cyber-pink fill-current' : 'text-gray-300'}"></i>
+                            </button>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center space-x-1 text-amber-400 mb-2 text-xs">
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                <span class="font-bold">${product.rating}</span>
+                                <span class="text-gray-400">(${product.reviewsCount} รีวิว)</span>
+                            </div>
+                            <h3 onclick="openQuickView(${product.id})" class="font-bold text-lg text-white mb-2 line-clamp-2 cursor-pointer hover:text-cyber-cyan transition-colors">
+                                ${product.name}
+                            </h3>
+                            <p class="text-gray-400 text-xs mb-4 line-clamp-2">${product.desc}</p>
+                            <div class="flex items-center text-xs text-emerald-400 space-x-1.5 mb-4">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                <span>${product.stock}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 pt-0 flex items-center justify-between border-t border-cyber-700/50 mt-auto">
+                        <div>
+                            <span class="text-xs text-gray-400 block">ราคาพิเศษ</span>
+                            <span class="text-2xl font-black text-cyber-cyan">฿${product.price.toLocaleString()}</span>
+                        </div>
+                        <button onclick="addToCart(${product.id})" class="p-3 rounded-xl bg-cyber-cyan/10 border border-cyber-cyan text-cyber-cyan hover:bg-cyber-cyan hover:text-cyber-900 transition-all font-semibold flex items-center space-x-1.5">
+                            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            <span class="text-xs">ใส่ตะกร้า</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function filterCategory(category) {
+            currentFilter = category;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-800 border border-cyber-700 text-gray-300 hover:border-cyber-cyan";
+            });
+            event.target.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold transition-all bg-cyber-cyan text-cyber-900 shadow-md";
+
+            const titles = {
+                'all': 'แคตตาล็อกสินค้าและอุปกรณ์ฮาร์ดแวร์',
+                'GPU': 'การ์ดจอ (Graphics Processing Unit)',
+                'CPU': 'ซีพียู (Central Processing Unit)',
+                'Motherboard': 'เมนบอร์ด (Motherboard)',
+                'RAM': 'หน่วยความจำ (RAM)',
+                'SSD': 'เอสเอสดี (SSD)',
+                'Liquid Cooling': 'ชุดน้ำระบายความร้อน (Liquid Cooling)',
+                'Monitor': 'จอมอนิเตอร์ความละเอียดสูง',
+                'Gaming Gear': 'อุปกรณ์เกมมิ่งเกียร์'
+            };
+            document.getElementById('catalogTitle').innerText = titles[category] || 'ผลการค้นหา';
+
+            if (category === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('headerSearch').value = '';
+            filterCategory('all');
+        }
+
+        function scrollToProducts() {
+            window.scrollTo({ top: 550, behavior: 'smooth' });
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById('cartDrawer');
+            drawer.classList.toggle('hidden');
+            renderCartItems();
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+            
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateBadges();
+            showToast(`เพิ่ม ${product.name.substring(0, 24)}... ลงในตะกร้าแล้ว`);
+        }
+
+        function updateQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+            }
+            updateBadges();
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cartItemsContainer');
+            const subtotalEl = document.getElementById('cartSubtotal');
+            
+            container.innerHTML = '';
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 text-gray-400">
+                        <i data-lucide="shopping-cart" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
+                        <p class="text-sm">ตะกร้าสินค้าของคุณว่างเปล่า</p>
+                    </div>
+                `;
+                subtotalEl.innerText = '฿0';
+                lucide.createIcons();
+                return;
+            }
+
+            let subtotal = 0;
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-cyber-900/60 p-4 rounded-xl border border-cyber-700/60";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-lg bg-cyber-800" onerror="this.src='https://placehold.co/200x200/111827/00F0FF?text=PC'">
+                        <div>
+                            <h4 class="font-bold text-sm text-white line-clamp-1">${item.name}</h4>
+                            <span class="text-xs text-cyber-cyan font-semibold">฿${item.price.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="updateQuantity(${item.id}, -1)" class="w-7 h-7 rounded-lg bg-cyber-800 border border-cyber-700 flex items-center justify-center text-gray-300 hover:border-cyber-cyan">-</button>
+                        <span class="text-sm font-bold text-white w-6 text-center">${item.quantity}</span>
+                        <button onclick="updateQuantity(${item.id}, 1)" class="w-7 h-7 rounded-lg bg-cyber-800 border border-cyber-700 flex items-center justify-center text-gray-300 hover:border-cyber-cyan">+</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            subtotalEl.innerText = `฿${subtotal.toLocaleString()}`;
+            lucide.createIcons();
+        }
+
+        // Wishlist Toggle
+        function toggleWishlist(productId) {
+            const product = products.find(p => p.id === productId);
+            const index = wishlist.findIndex(item => item.id === productId);
+            
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                showToast(`ลบ ${product.name.substring(0, 20)}... ออกจากรายการโปรดแล้ว`);
+            } else {
+                wishlist.push(product);
+                showToast(`บันทึก ${product.name.substring(0, 20)}... ลงในรายการโปรดแล้ว`);
+            }
+            updateBadges();
+            renderProducts(products);
+        }
+
+        function toggleWishlistModal() {
+            const modal = document.getElementById('wishlistModal');
+            const container = document.getElementById('wishlistContainer');
+            modal.classList.toggle('hidden');
+            
+            container.innerHTML = '';
+            if (wishlist.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-gray-400 text-sm">ยังไม่มีสินค้าในรายการโปรด</div>`;
+                return;
+            }
+
+            wishlist.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-cyber-900/60 p-4 rounded-xl border border-cyber-700";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-lg">
+                        <div>
+                            <h4 class="font-bold text-sm text-white line-clamp-1">${item.name}</h4>
+                            <span class="text-xs text-cyber-cyan font-bold">฿${item.price.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="addToCart(${item.id}); toggleWishlistModal();" class="px-3 py-2 rounded-lg bg-cyber-cyan text-cyber-900 font-bold text-xs">ใส่ตะกร้า</button>
+                        <button onclick="toggleWishlist(${item.id}); toggleWishlistModal(); toggleWishlistModal();" class="p-2 rounded-lg bg-cyber-700 text-gray-300 hover:text-white"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+        function openQuickView(productId) {
+            const product = products.find(p => p.id === productId);
+            const modal = document.getElementById('quickViewModal');
+            const content = document.getElementById('quickViewContent');
+
+            let specsHtml = '';
+            for (const [key, val] of Object.entries(product.specs)) {
+                specsHtml += `
+                    <div class="flex justify-between py-1.5 border-b border-cyber-700/50 text-xs">
+                        <span class="text-gray-400 font-medium">${key}</span>
+                        <span class="text-white font-semibold">${val}</span>
+                    </div>
+                `;
+            }
+
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="rounded-xl overflow-hidden bg-cyber-900 h-64 border border-cyber-700">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-cyber-900 border border-cyber-700 text-xs font-semibold text-cyber-cyan">${product.category}</span>
+                        <h3 class="font-black text-xl text-white mt-2 mb-2">${product.name}</h3>
+                        <p class="text-gray-400 text-xs mb-4 leading-relaxed">${product.desc}</p>
+                        <div class="text-2xl font-black text-cyber-cyan mb-4">฿${product.price.toLocaleString()}</div>
+                        <button onclick="addToCart(${product.id}); closeQuickView();" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyber-cyan to-cyber-purple text-cyber-900 font-bold hover:opacity-95 transition-all glow-cyan flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            <span>เพิ่มลงตะกร้าทันที</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h4 class="font-bold text-sm text-white mb-2">คุณสมบัติทางเทคนิค (Specifications)</h4>
+                    <div class="bg-cyber-900/60 p-4 rounded-xl border border-cyber-700/60">
+                        ${specsHtml}
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h4 class="font-bold text-sm text-white mb-2">ผลทดสอบประสิทธิภาพ (Benchmark Rating)</h4>
+                    <div class="space-y-2 text-xs">
+                        <div>
+                            <div class="flex justify-between text-gray-400 mb-1"><span>Gaming Performance (4K Ultra)</span><span class="text-cyber-cyan font-bold">98%</span></div>
+                            <div class="w-full h-2 bg-cyber-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-cyber-cyan to-cyber-purple w-[98%]"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-gray-400 mb-1"><span>Thermal Efficiency & Cooling</span><span class="text-emerald-400 font-bold">95%</span></div>
+                            <div class="w-full h-2 bg-cyber-900 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-emerald-400 to-cyber-cyan w-[95%]"></div></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickViewModal').classList.add('hidden');
+        }
+        function renderBuilderSlots() {
+            const container = document.getElementById('builderSlotsContainer');
+            container.innerHTML = '';
+
+            let totalCount = 0;
+            let totalPrice = 0;
+            let totalWattage = 50; 
+
+            builderCategories.forEach(cat => {
+                const item = builderConfig[cat.key];
+                if (item) {
+                    totalCount++;
+                    totalPrice += item.price;
+                    totalWattage += item.wattage || 30;
+                }
+
+                const div = document.createElement('div');
+                div.className = "bg-cyber-800 p-5 rounded-2xl border border-cyber-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-cyber-900 border border-cyber-700 flex items-center justify-center text-cyber-cyan font-bold">
+                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-cyber-cyan font-semibold uppercase tracking-wider">${cat.label}</span>
+                            <h4 class="font-bold text-white text-base">${item ? item.name : 'ยังไม่ได้เลือกชิ้นส่วน'}</h4>
+                            <p class="text-xs text-gray-400">${item ? '฿' + item.price.toLocaleString() : 'คลิกเพื่อเลือกอุปกรณ์ฮาร์ดแวร์'}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                        <button onclick="openBuilderPicker('${cat.key}')" class="px-4 py-2 rounded-xl bg-cyber-700 hover:bg-cyber-600 text-white font-semibold text-xs transition-all">
+                            ${item ? 'เปลี่ยนชิ้นส่วน' : '+ เลือกอุปกรณ์'}
+                        </button>
+                        ${item ? `<button onclick="removeBuilderItem('${cat.key}')" class="p-2 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById('builderTotalCount').innerText = `${totalCount} ชิ้นส่วน`;
+            document.getElementById('builderTotalPrice').innerText = `฿${totalPrice.toLocaleString()}`;
+            document.getElementById('estWattage').innerText = `${totalWattage} W`;
+            document.getElementById('recPsu').innerText = `${totalWattage + 200}W - ${totalWattage + 350}W`;
+            
+            lucide.createIcons();
+        }
+
+        function openBuilderPicker(categoryKey) {
+            activeBuilderCategory = categoryKey;
+            const modal = document.getElementById('builderPickerModal');
+            const titleEl = document.getElementById('builderPickerTitle');
+            const listEl = document.getElementById('builderPickerList');
+
+            const catInfo = builderCategories.find(c => c.key === categoryKey);
+            titleEl.innerText = `เลือกชิ้นส่วน: ${catInfo.label}`;
+            listEl.innerHTML = '';
+
+            const availableItems = products.filter(p => p.category === categoryKey);
+
+            if (availableItems.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-12 text-gray-400 text-sm">ไม่พบสินค้าในหมวดหมู่นี้</div>`;
+                modal.classList.remove('hidden');
+                return;
+            }
+
+            availableItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between bg-cyber-900/60 p-4 rounded-xl border border-cyber-700 hover:border-cyber-cyan transition-all cursor-pointer";
+                div.onclick = () => selectBuilderItem(categoryKey, item.id);
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-lg">
+                        <div>
+                            <h4 class="font-bold text-sm text-white line-clamp-1">${item.name}</h4>
+                            <span class="text-xs text-gray-400">กำลังไฟ: ${item.wattage || 30}W</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm font-black text-cyber-cyan block">฿${item.price.toLocaleString()}</span>
+                        <button class="mt-1 px-3 py-1 rounded-lg bg-cyber-cyan text-cyber-900 text-xs font-bold">เลือกชิ้นนี้</button>
+                    </div>
+                `;
+                listEl.appendChild(div);
+            });
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function selectBuilderItem(categoryKey, productId) {
+            const product = products.find(p => p.id === productId);
+            builderConfig[categoryKey] = product;
+            closeBuilderPicker();
+            renderBuilderSlots();
+            showToast(`เลือก ${product.name.substring(0, 20)}... เรียบร้อย`);
+        }
+
+        function removeBuilderItem(categoryKey) {
+            builderConfig[categoryKey] = null;
+            renderBuilderSlots();
+            showToast('ถอดชิ้นส่วนออกจากสเปกแล้ว');
+        }
+
+        function closeBuilderPicker() {
+            document.getElementById('builderPickerModal').classList.add('hidden');
+        }
+
+        function resetBuilder() {
+            builderConfig = { CPU: null, Motherboard: null, GPU: null, RAM: null, SSD: null, 'Liquid Cooling': null };
+            renderBuilderSlots();
+            showToast('ล้างข้อมูลสเปกทั้งหมดแล้ว');
+        }
+
+        function addBuilderToCart() {
+            const items = Object.values(builderConfig).filter(i => i !== null);
+            if (items.length === 0) {
+                showToast('กรุณาเลือกชิ้นส่วนอย่างน้อย 1 ชิ้นก่อนเพิ่มลงตะกร้า');
+                return;
+            }
+            items.forEach(item => {
+                const existing = cart.find(i => i.id === item.id);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ ...item, quantity: 1 });
+                }
+            });
+            updateBadges();
+            showToast('เพิ่มสเปกคอมพิวเตอร์ทั้งหมดลงในตะกร้าเรียบร้อย!');
+            toggleCart();
+        }
+
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showToast('ตะกร้าสินค้าว่างเปล่า กรุณาเลือกสินค้าก่อนสั่งซื้อ');
+                return;
+            }
+            toggleCart();
+            const modal = document.getElementById('checkoutModal');
+            const receiptContent = document.getElementById('receiptContent');
+
+            let subtotal = 0;
+            let itemsHtml = '';
+            cart.forEach(item => {
+                const totalItemPrice = item.price * item.quantity;
+                subtotal += totalItemPrice;
+                itemsHtml += `
+                    <div class="flex justify-between py-2 border-b border-cyber-700/40 text-xs">
+                        <span class="text-gray-300">${item.name} (x${item.quantity})</span>
+                        <span class="text-white font-semibold">฿${totalItemPrice.toLocaleString()}</span>
+                    </div>
+                `;
+            });
+
+            const tax = subtotal * 0.07;
+            const grandTotal = subtotal + tax;
+            const orderNo = 'CC-' + Math.floor(100000 + Math.random() * 900000);
+            const dateStr = new Date().toLocaleString('th-TH');
+
+            receiptContent.innerHTML = `
+                <div class="text-center pb-6 border-b border-cyber-700">
+                    <div class="w-12 h-12 rounded-xl bg-cyber-cyan flex items-center justify-center mx-auto mb-2 text-cyber-900 font-black">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="font-black text-xl text-white">ใบเสร็จรับเงิน / ใบกำกับภาษี</h3>
+                    <p class="text-xs text-cyber-cyan mt-1">CyberCore Tech Elite Hardware Store</p>
+                </div>
+                <div class="py-4 space-y-2 text-xs border-b border-cyber-700">
+                    <div class="flex justify-between"><span class="text-gray-400">เลขที่คำสั่งซื้อ:</span><span class="text-white font-bold">${orderNo}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">วันที่ทำรายการ:</span><span class="text-white">${dateStr}</span></div>
+                    <div class="flex justify-between"><span class="text-gray-400">ลูกค้า:</span><span class="text-white">คุณณัฐพงศ์ เทคโนโลยี (VIP)</span></div>
+                </div>
+                <div class="py-4 space-y-2">
+                    <h4 class="font-bold text-xs text-white uppercase tracking-wider mb-2">รายการสินค้า</h4>
+                    ${itemsHtml}
+                </div>
+                <div class="py-4 border-t border-cyber-700 space-y-2 text-xs">
+                    <div class="flex justify-between text-gray-400"><span>ยอดรวมสินค้า:</span><span>฿${subtotal.toLocaleString()}</span></div>
+                    <div class="flex justify-between text-gray-400"><span>ภาษีมูลค่าเพิ่ม (VAT 7%):</span><span>฿${tax.toLocaleString()}</span></div>
+                    <div class="flex justify-between text-sm font-black text-cyber-cyan pt-2 border-t border-cyber-700"><span>ยอดชำระสุทธิ:</span><span>฿${grandTotal.toLocaleString()}</span></div>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button onclick="confirmOrder('${orderNo}')" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyber-cyan to-cyber-purple text-cyber-900 font-bold hover:opacity-95 transition-all glow-cyan flex items-center justify-center space-x-2">
+                        <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                        <span>ยืนยันการชำระเงินและสั่งซื้อ</span>
+                    </button>
+                    <button onclick="closeCheckoutModal()" class="w-full py-2.5 rounded-xl bg-cyber-700 text-gray-300 font-semibold text-xs">
+                        ยกเลิก
+                    </button>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        function confirmOrder(orderNo) {
+            showToast(`สั่งซื้อสำเร็จ! รหัสคำสั่งซื้อ: ${orderNo}`);
+            cart = [];
+            updateBadges();
+            closeCheckoutModal();
+        }
+
+        const faqData = [
+            { q: "สินค้าทุกชิ้นเป็นของแท้และมีประกันศูนย์ไทยหรือไม่?", a: "ใช่ครับ ฮาร์ดแวร์ทุกชิ้นในร้าน CyberCore เป็นสินค้ามือหนึ่ง ของแท้ 100% จากศูนย์ไทย (Synnex, S-Curve, Ingram, Ascenti) พร้อมใบรับประกันเต็มเวลา" },
+            { q: "มีบริการประกอบและทดสอบระบบคอมพิวเตอร์ก่อนจัดส่งหรือไม่?", a: "มีบริการประกอบ จัดสาย และทดสอบ Burn-in Benchmark ระบบฟรี 100% โดยช่างเทคนิคผู้เชี่ยวชาญก่อนจัดส่งถึงหน้าบ้านครับ" },
+            { q: "สามารถผ่อนชำระผ่านบัตรเครดิตได้หรือไม่?", a: "สามารถผ่อนชำระ 0% นานสูงสุด 10 เดือนผ่านบัตรเครดิตธนาคารชั้นนำที่ร่วมรายการได้ครับ" }
+        ];
+
+        function renderFAQ() {
+            const container = document.getElementById('faqAccordionContainer');
+            container.innerHTML = '';
+            faqData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-cyber-800 rounded-2xl border border-cyber-700 overflow-hidden";
+                div.innerHTML = `
+                    <button onclick="toggleFaq(${index})" class="w-full p-5 text-left font-bold text-sm text-white flex justify-between items-center hover:bg-cyber-700/50 transition-all">
+                        <span>${item.q}</span>
+                        <i data-lucide="chevron-down" id="faqIcon-${index}" class="w-4 h-4 transition-transform"></i>
+                    </button>
+                    <div id="faqAns-${index}" class="px-5 pb-5 text-xs text-gray-400 leading-relaxed hidden">
+                        ${item.a}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        function toggleFaq(index) {
+            const ans = document.getElementById(`faqAns-${index}`);
+            ans.classList.toggle('hidden');
+        }
+
+        function toggleNotifications() {
+            const dropdown = document.getElementById('notifDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function toggleProfileModal() {
+            const modal = document.getElementById('profileModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function handleNewsletter(e) {
+            e.preventDefault();
+            const email = document.getElementById('newsletterEmail').value;
+            showToast(`สมัครรับข่าวสารด้วยอีเมล ${email} สำเร็จ!`);
+            document.getElementById('newsletterEmail').value = '';
+        }
+
+        function updateBadges() {
+            const cartBadge = document.getElementById('cartBadge');
+            const wishlistBadge = document.getElementById('wishlistBadge');
+            
+            const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalCartItems > 0) {
+                cartBadge.innerText = totalCartItems;
+                cartBadge.classList.remove('hidden');
+            } else {
+                cartBadge.classList.add('hidden');
+            }
+
+            if (wishlist.length > 0) {
+                wishlistBadge.innerText = wishlist.length;
+                wishlistBadge.classList.remove('hidden');
+            } else {
+                wishlistBadge.classList.add('hidden');
+            }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = "bg-cyber-800 border border-cyber-cyan text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 pointer-events-auto transform translate-y-2 opacity-0 transition-all duration-300";
+            toast.innerHTML = `
+                <i data-lucide="check-circle" class="w-5 h-5 text-cyber-cyan"></i>
+                <span class="text-sm font-semibold">${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
